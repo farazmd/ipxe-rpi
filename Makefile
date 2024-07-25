@@ -1,5 +1,5 @@
-FW_URL		:= https://github.com/raspberrypi/firmware/branches/stable/boot
-
+FW_URL		:= https://github.com/raspberrypi/firmware.git
+FW_BRANCH := stable
 EFI_BUILD	:= RELEASE
 EFI_ARCH	:= AARCH64
 EFI_TOOLCHAIN	:= GCC5
@@ -25,9 +25,12 @@ submodules :
 
 firmware :
 	if [ ! -e firmware ] ; then \
-		$(RM) -rf firmware-tmp ; \
-		svn export $(FW_URL) firmware-tmp && \
-		mv firmware-tmp firmware ; \
+    $(RM) -f -rf firmware-tmp ; \
+    git clone --depth 1 --no-checkout -b $(FW_BRANCH) $(FW_URL) firmware-tmp && \
+    cd firmware-tmp && git config core.sparseCheckout true && \
+    git sparse-checkout set boot && git checkout $(FW_BRANCH) && \
+    cd .. && \
+    mv firmware-tmp firmware ; \
 	fi
 
 efi : $(EFI_FD)
