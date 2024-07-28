@@ -10,7 +10,7 @@ EFI_FD		:= Build/RPi4/$(EFI_BUILD)_$(EFI_TOOLCHAIN)/FV/RPI_EFI.fd
 
 IPXE_CROSS	:= aarch64-linux-gnu-
 IPXE_SRC	:= ipxe/src
-IPXE_TGT	:= bin-arm64-efi/rpi.efi
+IPXE_TGT	:= bin-arm64-efi/snp.efi
 IPXE_EFI	:= $(IPXE_SRC)/$(IPXE_TGT)
 
 SDCARD_MB	:= 32
@@ -30,7 +30,7 @@ firmware :
     cd firmware-tmp && git config core.sparseCheckout true && \
     git sparse-checkout set boot && git checkout $(FW_BRANCH) && \
     cd .. && \
-    mv firmware-tmp firmware ; \
+    mv firmware-tmp/boot firmware ; \
 	fi
 
 efi : $(EFI_FD)
